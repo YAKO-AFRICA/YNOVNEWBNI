@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Paiement extends Model
+{
+    use HasFactory;
+
+
+    protected $connection = 'mysql2';
+    protected $table = 'tblpaiement';
+    protected $primaryKey = 'idPaiment';
+    public $timestamps = false;
+
+    protected $fillable = [
+        'codePaiement',
+        'montant',
+        'telpaiement',
+        'etat',
+        'datepaiement',
+        'payment_mode',
+        'paid_sum',
+        'paid_amount',
+        'payment_token',
+        'payment_status',
+        'command_number',
+        'payment_validation_date',
+        'typePaiement',
+        'idproposition',
+        'typeReference',
+        'referenceSource',
+        'nombreDePrime',
+        'num_souscripteur',
+        'frais_adhesion',
+        'code_produit',
+        'idmembre',
+        'emailpayeur',
+        'saisiele',
+    ];
+
+}

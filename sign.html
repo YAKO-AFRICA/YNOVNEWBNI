@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .container-sign {
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-sign my-2">
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Étape 2 : Signature</h4>
+        </div>
+        <div class="card-body">
+
+            <form action="" method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Votre signaturennnn</label>
+                    <div class="border rounded bg-light" style="width: 100%; height: 200px; position: relative;">
+                        <canvas id="signatureCanvas" style="width: 100%; height: 100%; touch-action: none;"></canvas>
+                    </div>
+                    
+                    <input type="hidden" name="signature" id="signatureData">
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" id="clearSignature" class="btn btn-outline-secondary btn-sm">Effacer</button>
+                    <button type="submit" class="btn btn-outline-success btn-sm">Valider la signature</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const canvas = document.getElementById('signatureCanvas');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+
+        document.getElementById('clearSignature').addEventListener('click', () => signaturePad.clear());
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (signaturePad.isEmpty()) {
+                e.preventDefault();
+                alert('Veuillez fournir votre signature');
+            } else {
+                document.getElementById('signatureData').value = signaturePad.toDataURL();
+            }
+        });
+
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext('2d').scale(ratio, ratio);
+            signaturePad.clear();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Données complètes des primes
+    const primeData = {
+        'Invest': {
+            '1000000': { M: 10300, T: 30700, S: 61100, A: 121200 },
+            '2000000': { M: 20500, T: 61400, S: 122200, A: 242400 },
+            '3000000': { M: 30800, T: 92100, S: 183400, A: 363600 }
+        },
+        'DOIHOO': {
+            '1000000': { M: 100, T: 400, S: 700, A: 1400 },
+            '2000000': { M: 300, T: 700, S: 1400, A: 2800 },
+            '3000000': { M: 400, T: 1100, S: 2700, A: 4200 }
+        }
+    };
+
+    const fraisAdhesion = 7500; // Frais d'adhésion fixes
+
+    // Éléments du DOM
+    const form = document.getElementById('doihooSimulateurForm');
+    const birthdateInput = document.getElementById('birthdate');
+    const capitalSelect = document.getElementById('capital');
+    const frequencySelect = document.getElementById('codePeriodicite');
+    const resultTable = document.getElementById('result');
+    const primePrincipElement = document.getElementById('primePrincip');
+    const primeTotalElement = document.getElementById('primeTotal');
+    const souscriptionBtn = document.getElementById('btn-souscription');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Écouteurs d'événements
+    form.addEventListener('submit', handleSubmit);
+    [birthdateInput, capitalSelect, frequencySelect].forEach(el => {
+        el.addEventListener('change', handleChange);
+    });
+    resetBtn.addEventListener('click', resetForm);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        calculatePrimes();
+    }
+
+    function handleChange() {
+        if (birthdateInput.value && capitalSelect.value && frequencySelect.value) {
+            calculatePrimes();
+        }
+    }
+
+    function calculatePrimes() {
+        const birthdate = birthdateInput.value;
+        const capital = capitalSelect.value;
+        const frequency = frequencySelect.value;
+        const capitalDoihou = capital * 0.2;
+
+        if (!validateInputs(birthdate, capital, frequency)) return;
+
+        const age = calculateAge(birthdate);
+        if (age < 18 || age > 99) {
+            showAlert('L\'âge doit être compris entre 18 et 99 ans');
+            return;
+        }
+
+        const investPrime = primeData['Invest'][capital][frequency];
+        const doihooPrime = primeData['DOIHOO'][capital][frequency];
+        const primeTotale = investPrime + doihooPrime + fraisAdhesion;
+
+        updateUI(investPrime, doihooPrime, capital, capitalDoihou, primeTotale);
+        saveToSession(birthdate, capital, frequency, age, investPrime, doihooPrime, capitalDoihou, primeTotale);
+    }
+
+    function resetForm() {
+        // Réinitialisation des champs du formulaire
+        form.reset();
+        birthdateInput.value = '';
+        capitalSelect.value = '';
+        frequencySelect.value = '';
+
+        // Réinitialisation des résultats
+        resultTable.innerHTML = '';
+        primePrincipElement.textContent = '0';
+        primeTotalElement.textContent = '0';
+        
+        // Désactivation du bouton de souscription
+        souscriptionBtn.classList.add('btn-inactif');
+        
+        // Suppression des données en session
+        sessionStorage.removeItem('simulationData');
+    }
+
+    function validateInputs(birthdate, capital, frequency) {
+        if (!birthdate || !capital || !frequency) {
+            showAlert('Veuillez remplir tous les champs');
+            return false;
+        }
+        return true;
+    }
+
+    function calculateAge(birthdate) {
+        const birthDate = new Date(birthdate);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    function updateUI(investPrime, doihooPrime, capital, capitalDoihou, primeTotale) {
+        resultTable.innerHTML = `
+            <tr>
+                <td>INVEST</td>
+                <td>${formatNumber(investPrime)} FCFA</td>
+                <td>${formatNumber(capital)} FCFA</td>
+            </tr>
+            <tr>
+                <td>DOIHOO</td>
+                <td>${formatNumber(doihooPrime)} FCFA</td>
+                <td>${formatNumber(capitalDoihou)} FCFA</td>
+            </tr>
+        `;
+
+        primePrincipElement.textContent = `${formatNumber(investPrime + doihooPrime)} FCFA`;
+        primeTotalElement.textContent = `${formatNumber(primeTotale)} FCFA`;
+        souscriptionBtn.classList.remove('btn-inactif');
+    }
+
+    function saveToSession(birthdate, capital, frequency, age, investPrime, doihooPrime, capitalDoihou, primeTotale) {
+        const simulationData = {
+            age: age,
+            capital: capital,
+            duree: document.getElementById('duree').value,
+            primeTotale: primeTotale,
+            birthdate: birthdate,
+            
+            frequency: frequency,
+            investPrime: investPrime,
+            doihooPrime: doihooPrime,
+            capitalDoihou: capitalDoihou,
+            timestamp: new Date().toISOString()
+        };
+        sessionStorage.setItem('simulationData', JSON.stringify(simulationData));
+    }
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat('fr-FR').format(num);
+    }
+
+    function showAlert(message) {
+        alert(message);
+    }
+
+    // Chargement initial
+    loadSavedData();
+
+    function loadSavedData() {
+        const savedData = JSON.parse(sessionStorage.getItem('simulationData'));
+        if (!savedData) return;
+
+        birthdateInput.value = savedData.birthdate;
+        capitalSelect.value = savedData.capital;
+        frequencySelect.value = savedData.frequency;
+
+        if (savedData.birthdate && savedData.capital && savedData.frequency) {
+            updateUI(
+                savedData.investPrime,
+                savedData.doihooPrime,
+                savedData.capital,
+                savedData.capitalDoihou,
+                savedData.primeTotale
+            );
+        }
+    }
+});
