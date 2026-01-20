@@ -29,7 +29,7 @@
                   
                 </div>
                 <div class="prestation col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3">
-                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleModal" class="demande">
+                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#RechercherContratClientModal" class="demande">
                     {{-- <a href="{{ route('prestation.selectPrestation') }}" class="demande"> --}}
                         <div class="card border rounded-4 py-5 text-center shadow-none border-success bg-outl-light-success">
                             <div class="card-body">

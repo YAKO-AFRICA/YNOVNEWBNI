@@ -234,6 +234,7 @@ Route::prefix('prestation')->name('prestation.')->group(function(){
         // Route::get('prestation/mesPrestations', [PrestationController::class, 'mesPrestations'])->name('mesPrestations');
         Route::get('/create/{id}',[PrestationController::class, 'create'])->name('create');
         Route::get('/autre/{id}',[PrestationController::class, 'createAutre'])->name('autre');
+        Route::post('/modifyInfosPerso/{idcontrat}',[PrestationController::class, 'modifyInfosPerso'])->name('modifyInfosPerso');
         Route::post('/autre/add',[PrestationController::class, 'storePrestAutre'])->name('storePrestAutre');
         Route::get('show/{code}',[PrestationController::class, 'show'])->name('show');
         Route::post('/add',[PrestationController::class, 'store'])->name('store');

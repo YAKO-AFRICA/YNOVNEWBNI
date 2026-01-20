@@ -4,101 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {{-- <link href="{{ asset('cust_assets/css/custom.css')}}" rel="stylesheet"> --}}
     <title>Formulaire de demande de prestation</title>
-    {{-- <style>
-        font-face {
-            font-family: 'Gotham-Book';
-            src: url('/Polices/Gotham-Book.otf') format('opentype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        @page {
-            margin: 0; /* Supprimer les marges par défaut */
-        }
-        * {
-            margin: 0px;
-            padding: 0px;
-            /* box-sizing: border-box; */
-        }
-        body {
-            font-family: 'Gotham-Book', sans-serif;
-            margin: 0px;
-            padding: 0px;
-            height: 100%;
-            width: 100%;
-            /* font-family: Arial, sans-serif; */
-        }
-        
-        .green-bar {
-            float: left;
-        }
-
-        /* Section droite : logo et sous-titre */
-        .right-section {
-            float: right;
-            width: 18%;
-            /* border: #ccc solid 1px; */
-            margin-left: 10px;
-            padding:15px 25px;
-            height: 100%;
-        }
-
-        .logo {
-            height: 80%;
-            width: 90%;
-
-            /* margin-bottom: 5px; */
-        }
-        .form-group {
-            margin-bottom: 15px;
-            position: relative;
-        } 
-        .section-prestation{
-            display: inline-block;
-            padding: 10px 0;
-            width: 100%;
-        }
-        
-        .prestation{
-            float: left;
-            width: 48%;
-            border-right: #ccc solid 1px;
-            margin-right: 15px;
-        }
-        .moyenPaiement{
-            float: right;
-            width: 48%;
-            /* border: red solid 1px; */
-        }
-        .section-signature{
-            position: relative;
-            display: inline-block;
-            /* padding: 10px 0; */
-            margin-top: 100px;
-            margin-bottom: -95px;
-            width: 100%;
-        }
-        .Autres{
-            position: relative;
-            left: -360px;
-            /* float: left; */
-            width: 48%;
-            /* border-right: #ccc solid 1px; */
-            margin-right: 15px;
-        }
-        .Signature{
-            /* float: right; */
-            position: relative;
-            left: 60px;
-            top: -150px;
-            width: 48%;
-            /* border: red solid 1px; */
-        }
-        .section-documents {
-            border-top: 1px dashed #ccc;
-        }
-    </style> --}}
+    
     <style>
         font-face {
             font-family: 'Gotham-Book';
@@ -134,13 +41,21 @@
         } */
 
         /* Section droite : logo et sous-titre */
-        .right-section {
+        .left-section {
             float: left;
             width: 18%;
-            /* border: #ccc solid 1px; */
-            margin-right: 10px;
-            padding:15px 25px;
+            /* border: #ccc solid 1px; 
+            margin-right: 10px;*/
+            padding:10px;
             height: 80%;
+        }
+        .right-section {
+            float: right;
+            width: 18%;
+            /* border: #ccc solid 1px; 
+            margin-right: 10px;*/
+            padding:10px 0;
+            height: 95%;
         }
 
         .logo {
@@ -201,22 +116,27 @@
 </head>
 <body >
 
-    
+    @php
+        \Carbon\Carbon::setLocale('fr');
+    @endphp
     <main class="main">   
         <section class="main-section" style="position: relative; height: 100%; width: 100%; overflow: hidden;">
            
             <header class="banner" style="width: 100%; background-color: #ffffff; height: 95px; margin: 0px">
-                <div class="left-section" style="float: right; height: 100%; width: 75%;">
+                <div class="left-section">
+                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('root/images/logo.png'))) }}" alt="Yako Africa Logo" class="logo">
+                </div>
+                <div class="center-section" style="float: left; height: 100%; width: 60%;">
                     <div class="yellow-bar" style="background-color: #f7b500; width: 100%; height: 50%;"></div>
                     <div class="green-bar-title"style="width: 100%; height: 50%; border: 1px solid #fff;">
-                        <div class="green-bar" style="background-color: #006838; width: 35%; height: 100%;"></div>
-                        <div class="center-section" style="float: left; width: 75%; height: 100%; padding: 10px 0; text-align: left;">
+                        {{-- <div class="green-bar" style="background-color: #006838; width: 35%; height: 100%;"></div> --}}
+                        <div class="center-section" style="width: 100%; height: 100%; padding: 10px 0; text-align: center;">
                             <h4>FORMULAIRE DE DEMANDE DE PRESTATION</h4>
                         </div>
                     </div>
                 </div>
                 <div class="right-section">
-                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('root/images/logo.png'))) }}" alt="Yako Africa Logo" class="logo">
+                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('logos/092.png'))) }}" alt="BNI Logo" class="logo">
                 </div>
             </header>
             <!-- Pseudo-élément pour l'image de fond -->
@@ -574,7 +494,7 @@
                                 padding: 5px;
                                 font-size: 14px;
                                 border-radius: 3px;
-                                background-color: #ffffff;" name="" value="{{ $prestation->created_at->format('d/m/Y') ?? '.' }}" /> <br> <br>
+                                background-color: #ffffff;" name="" value="{{ \Carbon\Carbon::parse($prestation->created_at)->translatedFormat('d F Y') ?? '.' }}" /> <br> <br>
                             
                         </div>
                     </div>

@@ -41,13 +41,21 @@
         } */
 
         /* Section droite : logo et sous-titre */
-        .right-section {
+         .left-section {
             float: left;
             width: 18%;
-            /* border: #ccc solid 1px; */
-            margin-right: 10px;
-            padding:15px 25px;
+            /* border: #ccc solid 1px; 
+            margin-right: 10px;*/
+            padding:10px;
             height: 80%;
+        }
+        .right-section {
+            float: right;
+            width: 18%;
+            /* border: #ccc solid 1px; 
+            margin-right: 10px;*/
+            padding:10px 0;
+            height: 95%;
         }
 
         .logo {
@@ -114,17 +122,20 @@
     <main class="main">   
         <section class="main-section" style="position: relative; height: 100%; width: 100%; overflow: hidden;">
             <header class="banner" style="width: 100%; background-color: #ffffff; height: 95px; margin: 0px">
-                <div class="left-section" style="float: right; height: 100%; width: 75%;">
+                <div class="left-section">
+                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('root/images/logo.png'))) }}" alt="Yako Africa Logo" class="logo">
+                </div>
+                <div class="center-section" style="float: left; height: 100%; width: 60%;">
                     <div class="yellow-bar" style="background-color: #f7b500; width: 100%; height: 50%;"></div>
                     <div class="green-bar-title"style="width: 100%; height: 50%; border: 1px solid #fff;">
-                        <div class="green-bar" style="background-color: #006838; width: 35%; height: 100%;"></div>
-                        <div class="center-section" style="float: left; width: 75%; height: 100%; padding: 10px 0; text-align: left;">
+                        {{-- <div class="green-bar" style="background-color: #006838; width: 35%; height: 100%;"></div> --}}
+                        <div class="center-section" style="width: 100%; height: 100%; padding: 10px 0; text-align: center;">
                             <h4>FORMULAIRE DE DEMANDE DE PRESTATION</h4>
                         </div>
                     </div>
                 </div>
                 <div class="right-section">
-                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('root/images/logo.png'))) }}" alt="Yako Africa Logo" class="logo">
+                    <img src="data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('logos/092.png'))) }}" alt="BNI Logo" class="logo">
                 </div>
             </header>
             <!-- Pseudo-élément pour l'image de fond -->
@@ -562,7 +573,7 @@
                             background-color: #ffffff;"
                         value="{{ (optional($prestation->membre)->typ_membre !== 3) ? (optional($prestation->membre)->codeagent ?? 'DL999') : 'DL999' }}" />
                 </div>
-                <div class="form-group" style="margin-top: 15px">
+                {{-- <div class="form-group" style="margin-top: 15px">
                     <label for="" style="margin-right: 2px;">Date RDV &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="text" id="" 
                         style="
@@ -614,7 +625,7 @@
                             border-radius: 3px;
                             background-color: #ffffff;"
                         value="." />
-                </div>
+                </div> --}}
                 <p for="prenom" style="margin-right: 2px; margin-top: 20px;"><strong>Pièce jointes</strong></p>
                 @php
                         $polices = $prestation->docPrestation->where('idPrestation', $prestation->id)->where('type', 'Police')->first();

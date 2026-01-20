@@ -596,6 +596,9 @@
                 } else {
                     console.warn("L'élément '.app-container' est introuvable !");
                 }
+
+                //const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                //console.log('CSRF Token:', csrfToken);
             })
         </script>
 

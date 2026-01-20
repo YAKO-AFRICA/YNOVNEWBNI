@@ -300,7 +300,7 @@
             });
 
             // Gestion des RIB inputs (avec validation)
-            ribInputs.forEach((input, index) => {
+            {{-- ribInputs.forEach((input, index) => {
                 input.addEventListener('input', function (event) {
                     this.value = this.value.replace(/[^a-zA-Z0-9]/g, ''); // Autoriser uniquement lettres et chiffres
                     handleInput(ribInputs, event, index);
@@ -308,6 +308,31 @@
 
                 input.addEventListener('keydown', (event) => handleKeyDown(ribInputs, event, index));
                 input.addEventListener('paste', handlePaste);
+            }); --}}
+            ribInputs.forEach((input, index) => {
+
+                // Filtrage après saisie
+                input.addEventListener('input', function (event) {
+                    this.value = this.value.replace(/\D/g, ''); // \D = tout sauf chiffre
+                    handleInput(ribInputs, event, index);
+                });
+
+                // Blocage des touches non numériques
+                input.addEventListener('keydown', function (event) {
+                    const allowedKeys = [
+                        'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+                    ];
+
+                    if (!/[0-9]/.test(event.key) && !allowedKeys.includes(event.key)) {
+                        event.preventDefault();
+                    }
+
+                    handleKeyDown(ribInputs, event, index);
+                });
+
+                input.addEventListener('paste', function (event) {
+                    event.preventDefault(); // empêcher collage
+                });
             });
         });
     </script>

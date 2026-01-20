@@ -112,278 +112,278 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('RechercherClientModal');
-    const methodSelect = document.getElementById('methodeRecherche');
-    const queryInput = document.getElementById('queryInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchResults = document.getElementById('searchResults');
-    const errorMessage = document.getElementById('errorMessage');
-    const clientDetails = document.getElementById('clientDetails');
-    const useClientBtn = document.getElementById('useClientBtn');
-    const searchText = document.getElementById('searchText');
-    const searchSpinner = document.getElementById('searchSpinner');
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('RechercherClientModal');
+        const methodSelect = document.getElementById('methodeRecherche');
+        const queryInput = document.getElementById('queryInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResults = document.getElementById('searchResults');
+        const errorMessage = document.getElementById('errorMessage');
+        const clientDetails = document.getElementById('clientDetails');
+        const useClientBtn = document.getElementById('useClientBtn');
+        const searchText = document.getElementById('searchText');
+        const searchSpinner = document.getElementById('searchSpinner');
 
-    // Adaptation du placeholder selon la méthode
-    methodSelect.addEventListener('change', function() {
-        const method = this.value;
-        queryInput.disabled = !method;
+        // Adaptation du placeholder selon la méthode
+        methodSelect.addEventListener('change', function() {
+            const method = this.value;
+            queryInput.disabled = !method;
 
-        if (method === 'numerocompte') {
-            queryInput.placeholder = 'Entrez le numéro de compte (ex: C123456789)';
-            queryInput.nextElementSibling.textContent = 'Format: C suivi de 9 chiffres';
-        } else if (method === 'numPiece') {
-            queryInput.placeholder = 'Entrez le numéro de pièce';
-            queryInput.nextElementSibling.textContent = 'Format: 123456789012';
-        } else if (method === 'codeProspert') {
-            queryInput.placeholder = 'Entrez le code du prospert (ex: PROS-XXXXXX)';
-            queryInput.nextElementSibling.textContent = 'Code généré automatiquement pour chaque prospert';
-        } else {
-            queryInput.placeholder = 'Sélectionnez d\'abord une méthode';
-            queryInput.nextElementSibling.textContent = '';
-        }
-    });
-
-    // 🔍 Lancer la recherche
-    searchBtn.addEventListener('click', async function() {
-        const method = methodSelect.value;
-        const query = queryInput.value.trim();
-
-        if (!method || !query) {
-            showError('Veuillez sélectionner une méthode et entrer une valeur');
-            return;
-        }
-
-        toggleSearchLoading(true);
-
-        try {
-            const clientData = await searchClient(method, query);
-
-            if (clientData) {
-                displayClientDetails(clientData);
-                sessionStorage.setItem('currentClient', JSON.stringify(clientData));
-                useClientBtn.classList.remove('d-none');
-                errorMessage.classList.add('d-none');
-                searchResults.classList.remove('d-none');
-                showToast('Client trouvé avec succès', 'success');
+            if (method === 'numerocompte') {
+                queryInput.placeholder = 'Entrez le numéro de compte (ex: C123456789)';
+                queryInput.nextElementSibling.textContent = 'Format: C suivi de 9 chiffres';
+            } else if (method === 'numPiece') {
+                queryInput.placeholder = 'Entrez le numéro de pièce';
+                queryInput.nextElementSibling.textContent = 'Format: 123456789012';
+            } else if (method === 'codeProspert') {
+                queryInput.placeholder = 'Entrez le code du prospert (ex: PROS-XXXXXX)';
+                queryInput.nextElementSibling.textContent = 'Code généré automatiquement pour chaque prospert';
             } else {
-                showError('Aucun client trouvé avec ces informations');
-                showToast('Aucun client trouvé', 'error');
+                queryInput.placeholder = 'Sélectionnez d\'abord une méthode';
+                queryInput.nextElementSibling.textContent = '';
             }
-        } catch (error) {
-            console.error('Erreur recherche:', error);
-            showError(error.message || 'Erreur lors de la recherche');
-            showToast('Erreur lors de la recherche', 'error');
-        } finally {
-            toggleSearchLoading(false);
-        }
-    });
-
-    // 🔄 Charger les données dans le formulaire principal
-    useClientBtn.addEventListener('click', function() {
-        const clientJson = sessionStorage.getItem('currentClient');
-        if (clientJson) {
-            const client = JSON.parse(clientJson);
-            fillMainForm(client);
-            bootstrap.Modal.getInstance(modal).hide();
-            showToast('Informations client chargées avec succès', 'success');
-        } else {
-            showToast('Aucune donnée client disponible', 'error');
-        }
-    });
-
-    // ============================
-    // 🔧 Fonctions utilitaires
-    // ============================
-    function toggleSearchLoading(isLoading) {
-        searchText.classList.toggle('d-none', isLoading);
-        searchSpinner.classList.toggle('d-none', !isLoading);
-        searchBtn.disabled = isLoading;
-    }
-
-    function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.classList.remove('d-none');
-        clientDetails.innerHTML = '';
-        useClientBtn.classList.add('d-none');
-        searchResults.classList.remove('d-none');
-    }
-
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer') || createToastContainer();
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.innerHTML = `<span>${message}</span><button class="toast-close" aria-label="Fermer">&times;</button>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        const autoClose = setTimeout(() => closeToast(toast), 5000);
-        toast.querySelector('.toast-close').addEventListener('click', () => {
-            clearTimeout(autoClose);
-            closeToast(toast);
         });
-        function closeToast(t) {
-            t.classList.remove('show');
-            setTimeout(() => t.remove(), 300);
+
+        // 🔍 Lancer la recherche
+        searchBtn.addEventListener('click', async function() {
+            const method = methodSelect.value;
+            const query = queryInput.value.trim();
+
+            if (!method || !query) {
+                showError('Veuillez sélectionner une méthode et entrer une valeur');
+                return;
+            }
+
+            toggleSearchLoading(true);
+
+            try {
+                const clientData = await searchClient(method, query);
+
+                if (clientData) {
+                    displayClientDetails(clientData);
+                    sessionStorage.setItem('currentClient', JSON.stringify(clientData));
+                    useClientBtn.classList.remove('d-none');
+                    errorMessage.classList.add('d-none');
+                    searchResults.classList.remove('d-none');
+                    showToast('Client trouvé avec succès', 'success');
+                } else {
+                    showError('Aucun client trouvé avec ces informations');
+                    showToast('Aucun client trouvé', 'error');
+                }
+            } catch (error) {
+                console.error('Erreur recherche:', error);
+                showError(error.message || 'Erreur lors de la recherche');
+                showToast('Erreur lors de la recherche', 'error');
+            } finally {
+                toggleSearchLoading(false);
+            }
+        });
+
+        // 🔄 Charger les données dans le formulaire principal
+        useClientBtn.addEventListener('click', function() {
+            const clientJson = sessionStorage.getItem('currentClient');
+            if (clientJson) {
+                const client = JSON.parse(clientJson);
+                fillMainForm(client);
+                bootstrap.Modal.getInstance(modal).hide();
+                showToast('Informations client chargées avec succès', 'success');
+            } else {
+                showToast('Aucune donnée client disponible', 'error');
+            }
+        });
+
+        // ============================
+        // 🔧 Fonctions utilitaires
+        // ============================
+        function toggleSearchLoading(isLoading) {
+            searchText.classList.toggle('d-none', isLoading);
+            searchSpinner.classList.toggle('d-none', !isLoading);
+            searchBtn.disabled = isLoading;
         }
-    }
 
-    function createToastContainer() {
-        const c = document.createElement('div');
-        c.id = 'toastContainer';
-        c.className = 'toast-container';
-        document.body.appendChild(c);
-        return c;
-    }
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('d-none');
+            clientDetails.innerHTML = '';
+            useClientBtn.classList.add('d-none');
+            searchResults.classList.remove('d-none');
+        }
 
-    // ============================
-    // 🔍 Recherche du client
-    // ============================
-    async function searchClient(method, query) {
-        const params = {};
-        if (method === 'numerocompte') params.numerocompte = query;
-        else if (method === 'numPiece') params.numPiece = query;
-        else if (method === 'codeProspert') params.codeProspert = query;
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer') || createToastContainer();
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<span>${message}</span><button class="toast-close" aria-label="Fermer">&times;</button>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            const autoClose = setTimeout(() => closeToast(toast), 5000);
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(autoClose);
+                closeToast(toast);
+            });
+            function closeToast(t) {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 300);
+            }
+        }
 
-        if (method === 'codeProspert') {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-           
-            const response = await fetch('/api/rechercher-prospert', {
-                 
+        function createToastContainer() {
+            const c = document.createElement('div');
+            c.id = 'toastContainer';
+            c.className = 'toast-container';
+            document.body.appendChild(c);
+            return c;
+        }
+
+        // ============================
+        // 🔍 Recherche du client
+        // ============================
+        async function searchClient(method, query) {
+            const params = {};
+            if (method === 'numerocompte') params.numerocompte = query;
+            else if (method === 'numPiece') params.numPiece = query;
+            else if (method === 'codeProspert') params.codeProspert = query;
+
+            if (method === 'codeProspert') {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            
+                const response = await fetch('/api/rechercher-prospert', {
+                    
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                if (!response.ok) throw new Error('Erreur lors de la recherche du prospert');
+                const data = await response.json();
+                return data.prospert || null;
+            }
+
+            // 🔸 Recherche via API externe
+            const response = await fetch('https://api.yakoafricassur.com/enov/search-personne-web', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
+                    'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjExODcyLCJlbWFpbCI6ImZvcm1hdGlvbi5ibmlAYm5pLmNvbSIsIm5vbSI6IkJOSSIsImNvZGVhZ2VudCI6IkIwNDAiLCJ0eXBlbWVicmUiOm51bGwsInByZW5vbSI6IkZvcm1hdGlvbiJ9.gwxwy43VeMDcfaTpgpFbuWkxjirIBqvuXq3UZOuw_nA'
                 },
                 body: JSON.stringify(params)
             });
 
-            if (!response.ok) throw new Error('Erreur lors de la recherche du prospert');
+            if (!response.ok) throw new Error(`Erreur API: ${response.status}`);
             const data = await response.json();
-            return data.prospert || null;
+            return data.dataPersonne?.[0] || null;
         }
 
-        // 🔸 Recherche via API externe
-        const response = await fetch('https://api.yakoafricassur.com/enov/search-personne-web', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MjExODcyLCJlbWFpbCI6ImZvcm1hdGlvbi5ibmlAYm5pLmNvbSIsIm5vbSI6IkJOSSIsImNvZGVhZ2VudCI6IkIwNDAiLCJ0eXBlbWVicmUiOm51bGwsInByZW5vbSI6IkZvcm1hdGlvbiJ9.gwxwy43VeMDcfaTpgpFbuWkxjirIBqvuXq3UZOuw_nA'
-            },
-            body: JSON.stringify(params)
-        });
+        // ============================
+        // 🧩 Affichage et remplissage
+        // ============================
+        function displayClientDetails(client) {
+            clientDetails.innerHTML = `
+                <div class="card client-card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">${client.nom || client.Nom} ${client.prenom || client.Prenom}</h5>
+                        <p><strong>Situation code:</strong> ${client.CodeSitMatrimoniale || client.situation_matrimoniale || 'Non renseigné'}</p>
+                        <p><strong>Date naissance:</strong> ${client.date_naissance || formatDateNaissance(client.DateNaissance) || 'Non renseigné'}</p>
+                        <p><strong>Lieu naissance:</strong> ${client.lieu_naissance || client.LieuNaissance || 'Non renseigné'}</p>
+                        <p><strong>Profession :</strong> ${client.profession || client.CodeProfession || 'Non renseigné'}</p>
+                        <p><strong>Résidence:</strong> ${client.lieu_residence || client.LieuResidence || 'Non renseigné'}</p>
+                        <p><strong>Email:</strong> ${client.email || 'Non renseigné'}</p>
+                        <p><strong>Téléphone:</strong> ${client.contactRessource || client.Contact || 'Non renseigné'}</p>
+                    </div>
+                </div>`;
 
-        if (!response.ok) throw new Error(`Erreur API: ${response.status}`);
-        const data = await response.json();
-        return data.dataPersonne?.[0] || null;
-    }
-
-    // ============================
-    // 🧩 Affichage et remplissage
-    // ============================
-    function displayClientDetails(client) {
-        clientDetails.innerHTML = `
-            <div class="card client-card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">${client.nom || client.Nom} ${client.prenom || client.Prenom}</h5>
-                    <p><strong>Situation code:</strong> ${client.CodeSitMatrimoniale || client.situation_matrimoniale || 'Non renseigné'}</p>
-                    <p><strong>Date naissance:</strong> ${client.date_naissance || formatDateNaissance(client.DateNaissance) || 'Non renseigné'}</p>
-                    <p><strong>Lieu naissance:</strong> ${client.lieu_naissance || client.LieuNaissance || 'Non renseigné'}</p>
-                    <p><strong>Profession :</strong> ${client.profession || client.CodeProfession || 'Non renseigné'}</p>
-                    <p><strong>Résidence:</strong> ${client.lieu_residence || client.LieuResidence || 'Non renseigné'}</p>
-                    <p><strong>Email:</strong> ${client.email || 'Non renseigné'}</p>
-                    <p><strong>Téléphone:</strong> ${client.contactRessource || client.Contact || 'Non renseigné'}</p>
-                </div>
-            </div>`;
-
-    }
-
-    
-
-       function getCivilite(code) {
-            const civilites = {
-                '1': 'Monsieur',
-                '2': 'Madame',
-                '3': 'Mademoiselle',
-                'M': 'Monsieur',
-                'Dr': 'Docteur',
-                'Mlle': 'Mademoiselle',
-                'Mme': 'Madame',
-                'Pr': 'Président'
-            };
-            return civilites[code] || '';
         }
-
-        function formatDateNaissance(dateString) {
-            let date = new Date(dateString);
-
-            // Récupérer l'année, le mois et le jour
-            let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString().padStart(2, '0');
-            let day = date.getDate().toString().padStart(2, '0');
-
-            // Construire le format "YYYY-MM-DD"
-            let formattedDate = `${year}-${month}-${day}`;
-            return formattedDate;
-        }
-
 
         
 
-    function fillMainForm(client) {
-        try {
-            // Civilité
-            const civilite = getCivilite(client.CodeCivilite || client.civilite);
-            setRadioValue('civilite', civilite);
-             const situationMCode = client.situation_matrimoniale || client.CodeSitMatrimoniale;
-            setRadioValue('situation_matrimoniale', situationMCode);
-            setInputValue('nom', client.nom || client.Nom);
-            setInputValue('prenom', client.prenom || client.Prenom);
-            setInputValue('personneressource', client.personneRessource || client.ContactNom);
-            setInputValue('contactpersonneressource', client.contactRessource || client.ContactCel);
-            setInputValue('personneressource2', client.personneRessource2 || '');
-            setInputValue('contactpersonneressource2', client.contactRessource2 || '');
-            setInputValue('datenaissance', formatDateNaissance(client.date_naissance || client.DateNaissance));
-            setSelectValue('lieunaissance', client.lieu_naissance || client.LieuNaissance);
-            setSelectValue('lieuresidence', client.lieu_residence || client.LieuResidence);
-            setSelectValue('profession', client.profession || client.Profession);
-            setInputValue('numeropiece', client.numero_piece_identite || client.NumPiece);
-            setRadioValue('naturepiece', client.type_piece_identite || client.PieceType || 'CNI');
-            setInputValue('mobile', client.contactRessource || client.Contact);
-            setInputValue('email', client.email || '');
-            triggerChangeEvent('lieunaissance');
-            triggerChangeEvent('lieuresidence');
-            triggerChangeEvent('profession');
-            showToast('Formulaire rempli avec succès', 'success');
-        } catch (e) {
-            console.error('Erreur remplissage:', e);
-            showToast('Erreur lors du remplissage', 'error');
+        function getCivilite(code) {
+                const civilites = {
+                    '1': 'Monsieur',
+                    '2': 'Madame',
+                    '3': 'Mademoiselle',
+                    'M': 'Monsieur',
+                    'Dr': 'Docteur',
+                    'Mlle': 'Mademoiselle',
+                    'Mme': 'Madame',
+                    'Pr': 'Président'
+                };
+                return civilites[code] || '';
+            }
+
+            function formatDateNaissance(dateString) {
+                let date = new Date(dateString);
+
+                // Récupérer l'année, le mois et le jour
+                let year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+
+                // Construire le format "YYYY-MM-DD"
+                let formattedDate = `${year}-${month}-${day}`;
+                return formattedDate;
+            }
+
+
+            
+
+        function fillMainForm(client) {
+            try {
+                // Civilité
+                const civilite = getCivilite(client.CodeCivilite || client.civilite);
+                setRadioValue('civilite', civilite);
+                const situationMCode = client.situation_matrimoniale || client.CodeSitMatrimoniale;
+                setRadioValue('situation_matrimoniale', situationMCode);
+                setInputValue('nom', client.nom || client.Nom);
+                setInputValue('prenom', client.prenom || client.Prenom);
+                setInputValue('personneressource', client.personneRessource || client.ContactNom);
+                setInputValue('contactpersonneressource', client.contactRessource || client.ContactCel);
+                setInputValue('personneressource2', client.personneRessource2 || '');
+                setInputValue('contactpersonneressource2', client.contactRessource2 || '');
+                setInputValue('datenaissance', formatDateNaissance(client.date_naissance || client.DateNaissance));
+                setSelectValue('lieunaissance', client.lieu_naissance || client.LieuNaissance);
+                setSelectValue('lieuresidence', client.lieu_residence || client.LieuResidence);
+                setSelectValue('profession', client.profession || client.Profession);
+                setInputValue('numeropiece', client.numero_piece_identite || client.NumPiece);
+                setRadioValue('naturepiece', client.type_piece_identite || client.PieceType || 'CNI');
+                setInputValue('mobile', client.contactRessource || client.Contact);
+                setInputValue('email', client.email || '');
+                triggerChangeEvent('lieunaissance');
+                triggerChangeEvent('lieuresidence');
+                triggerChangeEvent('profession');
+                showToast('Formulaire rempli avec succès', 'success');
+            } catch (e) {
+                console.error('Erreur remplissage:', e);
+                showToast('Erreur lors du remplissage', 'error');
+            }
         }
-    }
 
-    function setInputValue(name, value) {
-        const el = document.querySelector(`input[name="${name}"]`);
-        if (el && value) el.value = value;
-    }
+        function setInputValue(name, value) {
+            const el = document.querySelector(`input[name="${name}"]`);
+            if (el && value) el.value = value;
+        }
 
-    function setRadioValue(name, value) {
-        const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
-        if (el) el.checked = true;
-    }
+        function setRadioValue(name, value) {
+            const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            if (el) el.checked = true;
+        }
 
-    function setSelectValue(name, value) {
-        if (!value) return;
-        const select = document.querySelector(`select[name="${name}"]`);
-        const option = Array.from(select?.options || []).find(opt => opt.text.trim().toLowerCase() === value.trim().toLowerCase());
-        if (option) option.selected = true;
-    }
+        function setSelectValue(name, value) {
+            if (!value) return;
+            const select = document.querySelector(`select[name="${name}"]`);
+            const option = Array.from(select?.options || []).find(opt => opt.text.trim().toLowerCase() === value.trim().toLowerCase());
+            if (option) option.selected = true;
+        }
 
-    function triggerChangeEvent(name) {
-        const el = document.querySelector(`[name="${name}"]`);
-        if (el) el.dispatchEvent(new Event('change'));
-    }
+        function triggerChangeEvent(name) {
+            const el = document.querySelector(`[name="${name}"]`);
+            if (el) el.dispatchEvent(new Event('change'));
+        }
 
-    modal.addEventListener('shown.bs.modal', function() {
-        methodSelect.dispatchEvent(new Event('change'));
+        modal.addEventListener('shown.bs.modal', function() {
+            methodSelect.dispatchEvent(new Event('change'));
+        });
     });
-});
 </script>

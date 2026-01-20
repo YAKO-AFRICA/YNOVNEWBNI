@@ -1,11 +1,6 @@
-<!-- Button trigger modal -->
-{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Basic modal</button> --}}
-<!-- Modal -->
-{{--  --}}
-
 
 <div class="modal fade" id="exampleModal{{ $typePrestation->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    @php
+    {{-- @php
         $produitsEpargneValides = ["CADENCE", "DOIHOO", "CAD_EDUCPLUS", "PFA_IND"];
         $produitsObsequeValides1 = ["YKE_2008","YKE_2018"];
         $produitsObsequeValides2 = ["YKS_2008","YKS_2018"];
@@ -32,11 +27,10 @@
         }
         // dd($dureeCotisation, $NbrencConfirmer);
         
-    @endphp
-    <div class="modal-dialog">
+    @endphp --}}
+    {{-- <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                {{-- <h5 class="modal-title" id="exampleModalLabel">Modal title</h5> --}}
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -116,16 +110,47 @@
                     @if(in_array($contractDetails['codeProduit'], $produitsObsequeValides1) || in_array($contractDetails['codeProduit'], $produitsObsequeValides2))
                         <a href="{{ route('rdv.create', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
                     @endif
-                    {{-- @if(in_array($contractDetails['codeProduit'], $produitsObsequeValides2))
-                        <a href="{{ route('rdv.create', $typePrestation->id) }}" class="btn">
-                            Ok, Je Continue
-                        </a>
-                    @endif --}}
                 </div>
             @elseif($typePrestation->impact == 'Autre')
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Fermer</button>
                     <a href="{{ route('prestation.autre', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
+                </div>
+            @endif
+        </div>
+    </div> --}}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card radius-10">
+                    <div class="card-body bg-light-success rounded">
+
+                        <div class="row">
+                            <div class="col-md-3 col-lg-3 col-sm-12 text-center">
+                                <img src="{{ asset('root/images/login-images/yvon.png')}}" class="rounded-circle p-1 border img-fluid">
+                            </div>
+                            <div class="col-md-9 col-lg-9 col-sm-12">
+                                <h5 class="mt-0">Qu'est ce qu'un(e) {{$typePrestation->libelle ?? ''}}</h5>
+                                <p class="mb-0">{!! ($typePrestation->description) ?? 'Pas de description' !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if($typePrestation->impact == 'Autre')
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Fermer</button>
+                    <a href="{{ route('prestation.autre', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
+                </div>
+            @else
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Fermer</button>
+                    <a href="{{ route('prestation.create', $typePrestation->id) }}" class="btn">
+                        Ok, Je Continue
+                    </a>
                 </div>
             @endif
         </div>

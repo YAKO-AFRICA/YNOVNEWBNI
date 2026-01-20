@@ -15,7 +15,14 @@
                 $partner = \App\Models\Partner::where(['code' => $codePartenaire])->first();
             @endphp
 
-            @if ($partner != null && $partner->logo != null)
+            <a href="{{ route('shared.home')}}">
+                <img src="{{ asset('logos/'. $codePartenaire . '.png') }}"
+                style="min-height: 100%; min-width: 100%; background-color: #fff' : 'height: 100%; width: 100%;" 
+                class="logo-icon img-fluid"
+                alt="logo partenaire">
+            </a>
+            
+            {{-- @if ($partner != null && $partner->logo != null)
                 <a href="{{ route('shared.home')}}">
                     <img src="{{ asset('logos/'. $codePartenaire . '.png') }}"
                     style="min-height: 100%; min-width: 100%; background-color: #fff' : 'height: 100%; width: 100%;" 
@@ -29,7 +36,7 @@
                     class="logo-icon img-fluid"
                     alt="logo default">
                 </a>
-            @endif
+            @endif --}}
         </div>
 
         <div class="overflow-auto " style="height: calc(90vh - 180px)">
@@ -102,7 +109,7 @@
 
                 @can('Demarrer une prestation')
                     <li>
-                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#RechercherContratClientModal">
                             <div class="parent-icon"><i class="bx bx-dollar-circle fs-5"></i>
                             </div>
                             <div class="menu-title">Nouvelle demande</div>
