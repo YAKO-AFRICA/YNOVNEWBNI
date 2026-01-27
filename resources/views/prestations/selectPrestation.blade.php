@@ -47,7 +47,7 @@
                     <a href="{{ route('prestation.autre', $typePrestationAutre->id) }}" class="prestation">
                         <div class="card border rounded-4 text-center shadow-none bg-light-success">
                             <div class="card-body">
-                                <p class="mb-0 fs-5 text-success">{{ $typePrestationAutre->libelle ?? 'Non renseigné' }}</p>
+                                <p class="mb-0 fs-5 text-success">{{ $typePrestationAutre->libelle ?? 'Non renseigné' }}s</p>
                             </div>
                         </div>
                     </a>
@@ -77,8 +77,8 @@
                             <td>{{ $contractDetails['PrenomSous'] ?? 'N/A' }}</td>
                         </tr>
                         <tr>
-                            <th>Code Contrat</th>
-                            <td>{{ $contractDetails['CodeProposition'] ?? 'N/A' }}</td>
+                            <th>Id Contrat</th>
+                            <td>{{ $contractDetails['IdProposition'] ?? 'N/A' }}</td>
                         </tr>
                         <tr>
                             <th>Date Naissance</th>
@@ -92,10 +92,10 @@
                             <th>Produit</th>
                             <td>{{ $contractDetails['produit'] ?? 'N/A' }}</td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th>Montant Souscrit</th>
                             <td>{{ number_format($contractDetails['CapitalSouscrit'] ?? 0, 2, ',', ' ') }} FCFA</td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <th>Prime Totale</th>
                             <td>{{ number_format($contractDetails['TotalPrime'] ?? 0, 2, ',', ' ') }} FCFA</td>

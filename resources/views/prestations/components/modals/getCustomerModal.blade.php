@@ -418,14 +418,14 @@
                                 data-bs-toggle="tooltip"
                                 title="Demander une prestation"
                                 onclick="demanderPrestation('${contrat.id}')">
-                                <i class="bi bi-arrow-repeat"></i>
+                                <i class="bi bi-plus-lg fs-4"></i>
                             </button>
 
                             <button class="btn btn-sm btn-outline-success"
                                 data-bs-toggle="tooltip"
                                 title="Voir l'état de cotisation"
                                 onclick="voirEtatCotisation('${contrat.id}')">
-                                <i class="bi bi-bar-chart-line"></i>
+                                <i class="bi bi-file-text fs-4"></i>
                             </button>
 
                             <div id="spinner-${contrat.id}" style="display: none; margin-top: 10px;">

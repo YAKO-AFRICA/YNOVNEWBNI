@@ -73,6 +73,7 @@
                         @include('prestations.components.steps.stepInfosPerso')
                         <input type="hidden" id="tokGenerate" name="tokGenerate" value="{{ $tok }}">
                         <input type="hidden" id="OTP_API" name="OTP_API" value="{{ config('services.otp_api') }}">
+                        <input type="hidden" name="typeprestation_id" id="typeprestation_id" value="{{ $typePrestation->id ?? '' }}">
                         @php
                             $keyUuid = $token['key_uuid'];
                             $operationType = $token['operation_type'];
@@ -173,6 +174,7 @@
             updateDocName();
         });
 
+    
         document.addEventListener('DOMContentLoaded', function() {
             const formulaire = document.querySelector('#PrestationForm');
             // alert(formulaire);
@@ -392,5 +394,44 @@
             clearInterval(pollingInterval);
         }
     });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+            const clotureCompteRadios = document.querySelectorAll('input[name="clotureCompte"]');
+            const moyenPaiementBlock = document.getElementById('moyenPaiementBlock');
+            const mobileMoneyBlock = document.getElementById('mobileMoneyBlock');
+            const typeprestation = @json($typePrestation);
+
+            {{-- console.log(typeprestation); --}}
+            if(typeprestation.impact == 1){
+                
+                function updateDisplay() {
+                    moyenPaiementBlock.style.display = 'none';
+                    mobileMoneyBlock.style.display = 'none';
+
+                    clotureCompteRadios.forEach(radio => {
+                        if (radio.checked && radio.value === "0") {
+                            // NON : afficher tout
+                            moyenPaiementBlock.style.display = 'block';
+                            mobileMoneyBlock.style.display = 'block';
+                        }
+
+                        if (radio.checked && radio.value === "1") {
+                            // OUI : afficher paiement sans Mobile Money
+                            moyenPaiementBlock.style.display = 'block';
+                            mobileMoneyBlock.style.display = 'none';
+                        }
+                    });
+                }
+
+                clotureCompteRadios.forEach(radio => {
+                    radio.addEventListener('change', updateDisplay);
+                });
+
+                updateDisplay();
+            }
+        });
 </script>
 @endsection

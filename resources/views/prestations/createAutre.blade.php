@@ -310,7 +310,16 @@
                                     Nouveau contact téléphonique souhaité <span class="star">*</span>
                                 </label>
                                 <input type="number" min="0" class="form-control"
-                                    value="{{ $membreDetails->cel ?? '' }}"
+                                    value="{{ substr(
+                                        preg_replace('/\D/', '', 
+                                            $membreDetails->mobile 
+                                            ?? $membreDetails->mobile1 
+                                            ?? $membreDetails->telephone 
+                                            ?? $membreDetails->telephone1 
+                                            ?? ''
+                                        ),
+                                        -10
+                                    ) }}"
                                     id="nouveauContactTelephonique" name="nouveauContactTelephonique">
                             </div>
                         </div>
@@ -341,8 +350,17 @@
                                 </label>
                                 
                                 <input type="number" class="form-control" id="cel" name="cel"
-                                    value="{{ $membreDetails->cel ?? '' }}"
-                                    placeholder="Ex: +2250700000000" required>
+                                    value="{{ substr(
+                                        preg_replace('/\D/', '', 
+                                            $membreDetails->mobile 
+                                            ?? $membreDetails->mobile1 
+                                            ?? $membreDetails->telephone 
+                                            ?? $membreDetails->telephone1 
+                                            ?? ''
+                                        ),
+                                        -10
+                                    ) }}"
+                                    placeholder="Ex: 0700000000" required>
                             </div>
                             <div class="col-12 col-lg-6">
                                 <label for="email" class="form-label">

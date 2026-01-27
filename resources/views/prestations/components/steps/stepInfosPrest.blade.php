@@ -53,8 +53,9 @@
                                         <input type="text" class="form-control" min="0"
                                             name="montantSouhaite" id="montantSouhaite"
                                             placeholder="Saisir le montant souhaité" required disabled>
-                                        <small><i id="msgerror" class="text-danger"></i></small>
-                                        <small><i id="msgesucces" class="text-success"></i></small>
+                                        <small><i id="msgerror" class="text-danger fs-4"></i></small>
+                                        <small><i id="msgesucces" class="text-success fs-4"></i></small>
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -83,11 +84,20 @@
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <div class="row g-3 mb-3 text-center">
+                                <p class="{{ $typePrestation->impact == 1 ? 'd-block' : 'd-none' }}">Le client a-t-il cloturé son compte ?
+
+                                    <input type="radio" name="clotureCompte" value="0" id="clotureNon"> &nbsp;
+                                    <label for="clotureNon">Non</label> &nbsp; &nbsp;
+
+                                    <input type="radio" name="clotureCompte" value="1" id="clotureOui"> &nbsp;
+                                    <label for="clotureOui">Oui</label>
+                                </p>
+                                
+                                <div class="row g-3 mb-3 text-center" id="moyenPaiementBlock">
                                     <span class="form-label">Par quel moyen de paiement souhaitez-vous être payé ?
                                         <span class="star">*</span></span>
                                     <div class="row d-flex justify-content-center align-items-center mt-3 gap-3">
-                                        <div class="moyenPaiement-option col-lg-3 col-md-4 col-sm-12">
+                                        <div class="moyenPaiement-option col-lg-3 col-md-4 col-sm-12" id="mobileMoneyBlock">
                                             <input type="radio" name="moyenPaiement" value="Mobile_Money"
                                                 id="mobileMoney" class="moyenPaiement-input">
                                             <label for="mobileMoney"
@@ -162,44 +172,44 @@
                                         <div class="rib-container row">
                                             <div class="col-lg-3 col-12 mb-3 w-lg-20 ">
                                                 <label for="codebanque" class="form-label">Code Banque</label><br>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codebanque[0] ?? 'C' }}" name="rib_1" maxlength="1" readonly>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codebanque[1] ?? 'I' }}" name="rib_2" maxlength="1" readonly>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codebanque[2] ?? '' }}" name="rib_3" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codebanque[3] ?? '' }}" name="rib_4" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codebanque[4] ?? '' }}" name="rib_5" maxlength="1">
+                                                <input type="text" class="rib-input" value="C" name="rib_1" maxlength="1" readonly>
+                                                <input type="text" class="rib-input" value="I" name="rib_2" maxlength="1" readonly>
+                                                <input type="text" class="rib-input" value="0" name="rib_3" maxlength="1" readonly>
+                                                <input type="text" class="rib-input" value="9" name="rib_4" maxlength="1" readonly>
+                                                <input type="text" class="rib-input" value="2" name="rib_5" maxlength="1" readonly>
                                             </div>
                                             <div class="col-lg-3 col-12 mb-3 w-lg-20 ">
                                                 <label for="codeagence" class="form-label">Code Agence</label><br>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codeguichet[0] ?? '' }}" name="rib_6" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codeguichet[1] ?? '' }}" name="rib_7" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codeguichet[2] ?? '' }}" name="rib_8" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codeguichet[3] ?? '' }}" name="rib_9" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->codeguichet[4] ?? '' }}" name="rib_10" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_6" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_7" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_8" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_9" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_10" maxlength="1">
                                             </div>
                                             <div class="col-lg-5 col-12 mb-3 ">
                                                 <label for="numcompte" class="form-label">N° de Compte</label><br>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[0] ?? '' }}" name="rib_11" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[1] ?? '' }}" name="rib_12" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[2] ?? '' }}" name="rib_13" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[3] ?? '' }}" name="rib_14" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[4] ?? '' }}" name="rib_15" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[5] ?? '' }}" name="rib_16" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[6] ?? '' }}" name="rib_17" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[7] ?? '' }}" name="rib_18" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[8] ?? '' }}" name="rib_19" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[9] ?? '' }}" name="rib_20" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[10] ?? '' }}" name="rib_21" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->numerocompte[11] ?? '' }}" name="rib_22" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_11" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_12" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_13" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_14" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_15" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_16" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_17" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_18" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_19" maxlength="1">
+                                                <input type="text" class="rib-input" name="rib_20" maxlength="1">
+                                                <input type="text" class="rib-input"  name="rib_21" maxlength="1">
+                                                <input type="text" class="rib-input"  name="rib_22" maxlength="1">
                                             </div>
                                             <div class="col-lg-1 col-12 mb-3 w-lg-15 ">
                                                 <label for="clerib" class="form-label">Clé RIB</label><br>
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->rib[0] ?? '' }}" name="rib_23" maxlength="1">
-                                                <input type="text" class="rib-input" value="{{ $membreDetails->rib[1] ?? '' }}" name="rib_24" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_23" maxlength="1">
+                                                <input type="text" class="rib-input" value="" name="rib_24" maxlength="1">
                                             </div>
                                             <span class=""><i id="ibanMsgError" class="text-danger"></i></span>
                                             <span class=""><i id="ibanMsgSuccess" class="text-success"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" value="{{ $membreDetails->codebanque.$membreDetails->codeguichet.$membreDetails->numerocompte.$membreDetails->rib ?? '' }}" name="IBAN" id="IBAN">
+                                        <input type="hidden" class="form-control" value="" name="IBAN" id="IBAN">
                                             
                                         <input type="hidden" name="TelOtp" value="" id="TelOtp">
                                     </div>

@@ -66,6 +66,7 @@
                                                             accept=".jpg, .png, image/jpeg, image/png, .pdf"
                                                             class="form-control"
                                                             onchange="previewFilesPrest(event, 'previewDocName')" required>
+                                                            <input type="hidden" name="filename[]" value=".">
                                                         <input type="hidden" name="type[]" value="" id="DocName"
                                                             required>
                                                     </div>
@@ -96,6 +97,7 @@
                                                     <input id="CNIrecto-file-uploa" class="form-control" type="file"
                                                         name="libelle[]" accept=".jpg, .png, image/jpeg, image/png"
                                                         onchange="previewFilesPrest(event, 'previewCNIrecto')" required>
+                                                    <input type="hidden" name="filename[]" value="CNI recto">
                                                     <input type="hidden" name="type[]" value="CNIrecto">
                                                 </div>
                                                 <div id="previewCNIrecto" class="mt-3 preview-area"></div>
@@ -108,6 +110,7 @@
                                                     <input id="CNIverso-file-uploa" class="form-control" type="file"
                                                         name="libelle[]" accept=".jpg, .png, image/jpeg, image/png"
                                                         onchange="previewFilesPrest(event, 'previewCNIverso')" required>
+                                                    <input type="hidden" name="filename[]" value="CNI verso">
                                                     <input type="hidden" name="type[]" value="CNIverso">
                                                 </div>
 
@@ -140,6 +143,7 @@
                                                             accept=".jpg, .png, image/jpeg, image/png, .pdf"
                                                             onchange="previewFilesPrest(event, 'previewFicheIDNum')"
                                                             required>
+                                                        <input type="hidden" name="filename[]" value="Fiche d'identification du numero de téléphone">
                                                         <input type="hidden" name="type[]" value="FicheIDNum" required>
                                                     </div>
                                                     <div id="previewFicheIDNum" class="mt-3 preview-area"></div>
@@ -169,7 +173,7 @@
                                                         <input type="file" name="libelle[]" class="form-control"
                                                             accept=".jpg, .png, image/jpeg, image/png, .pdf"
                                                             onchange="previewFilesPrest(event, 'previewRIB')" required>
-
+                                                        <input type="hidden" name="filename[]" value="RIB">
                                                         <input type="hidden" name="type[]" value="RIB">
                                                     </div>
                                                     <div id="previewRIB" class="mt-3 preview-area"></div>
@@ -184,8 +188,8 @@
                                 @endif
                             @endunless
 
-                            {{-- @unless ($types['Signature'] == 'Signature')
-                                <!-- Signature -->
+                            @unless ($types['AttestationClotureCompte'] == 'AttestationClotureCompte')
+                                <!-- Attestation de cloture du compte -->
                                 <div class="col-xl-9 mx-auto">
 
                                     <div class="card">
@@ -194,20 +198,18 @@
 
                                             <div class="mb-3">
 
-                                                <label class="form-label">Signature (Veuillez signer une feuille blanche
-                                                    précédé de la mention <span class="text-danger">"LU et APPROUVE"</span>
-                                                    ) et joindre la photo</label>
+                                                <label class="form-label">Attestation de cloture du compte ou tout autre document justifiant de la cloture du compte</label>
 
                                                 <div class="input-group">
 
                                                     <input type="file" name="libelle[]" class="form-control"
                                                         accept=".jpg, .png, image/jpeg, image/png"
-                                                        onchange="previewFilesPrest(event, 'previewSignature')" required>
-
-                                                    <input type="hidden" name="type[]" value="Signature">
+                                                        onchange="previewFilesPrest(event, 'previewAttestationClotureCompte')" required>
+                                                    <input type="hidden" name="filename[]" value="Attestation de cloture du compte">
+                                                    <input type="hidden" name="type[]" value="AttestationClotureCompte">
                                                 </div>
 
-                                                <div id="previewSignature" class="mt-3 preview-area"></div>
+                                                <div id="previewAttestationClotureCompte" class="mt-3 preview-area"></div>
 
                                             </div>
 
@@ -216,7 +218,7 @@
                                     </div>
 
                                 </div>
-                            @endunless --}}
+                            @endunless
                         </div>
                     @endif
                 </div>

@@ -32,6 +32,7 @@
                                value="{{ $contractDetails['nomSous'] ?? '' }}" 
                                placeholder="Votre Nom" readonly>
                         <input type="hidden" name="typeprestation" value="{{ $typePrestation->libelle ?? '' }}">
+                        
                         <input type="hidden" name="idclient" value="{{ $membreDetails->idmembre ?? '' }}">
                     </div>
                     <div class="col-12 col-lg-6">

@@ -348,7 +348,7 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <h6 class="mb-0" style="font-size: 10px">
-                                        @if ($doc->filename != '' || $doc->filename != null)
+                                        @if ($doc->filename != '' || $doc->filename != null || $doc->filename != '.')
                                             {{ $doc->filename }}
                                         @else
                                             {{ $doc->type == 'Police'
@@ -384,7 +384,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">
-                                                    @if ($doc->filename != '' || $doc->filename != null)
+                                                    @if ($doc->filename != '' || $doc->filename != null || $doc->filename != '.')
                                                         {{ $doc->filename }}
                                                     @else
                                                         {{ $doc->type == 'Police'

@@ -546,7 +546,7 @@
                 </section>
             </div>
             <section class="section-documents" style="background-color: #E7F0EB; padding: 0px 20px; height: 322px; margin-top: -15px;">
-                <h5 style="color: #006838">Zone réservée à YAKO AFRICA</h5>
+                <h5 style="color: #006838">Zone réservée à l'agent BNI</h5>
                 <div class="form-group" style="margin-top: 15px">
                     <label for="prenom" style="margin-right: 2px;">Nom et Prenoms &nbsp;</label>
                     <input type="text" id="prenom" 
@@ -636,6 +636,8 @@
 
                         $AttestationPerteContrat = $prestation->docPrestation->where('idPrestation', $prestation->id)->where('type', 'AttestationPerteContrat')->first();
 
+                        $AttestationClotureCompte = $prestation->docPrestation->where('idPrestation', $prestation->id)->where('type', 'AttestationClotureCompte')->first();
+
                         $FicheIDNum = $prestation->docPrestation->where('idPrestation', $prestation->id)->where('type', 'FicheIDNum')->first();
 
                         $CNI = $prestation->docPrestation->where('idPrestation', $prestation->id)->where('type', 'CNI')->first();
@@ -646,10 +648,10 @@
                         style="width: 4%; margin-bottom: -7px; border: 1px solid #90C8A7; padding: 5px; font-size: 14px; text-align:center; color: #F7A400; border-radius: 3px; background-color: #ffffff;"
                         value="{{ $polices != null || $bulletin != null ? 'X' : '.' }}" />&nbsp; &nbsp;
 
-                    <label for="prenom">Bulletin de souscription Invest &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
+                    <label for="prenom">Attestation de clôture de compte &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</label>
                     <input type="text" 
                            style="width: 4%; margin-bottom: -7px; border: 1px solid #90C8A7; padding: 5px; font-size: 14px; text-align:center; color: #F7A400; border-radius: 3px; background-color: #ffffff;"
-                           value="." />&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+                           value="{{ $AttestationClotureCompte != null ? 'X' : '.' }}" />&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
 
                     <label for="prenom">RIB &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="text" style="width: 4%; margin-bottom: -7px; border: 1px solid #90C8A7; padding: 5px; font-size: 14px; text-align:center; color: #F7A400; border-radius: 3px; background-color: #ffffff;"

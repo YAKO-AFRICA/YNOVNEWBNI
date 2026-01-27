@@ -155,7 +155,7 @@
                         <a href="{{ route('report.ePrestation')}}">
                             <div class="parent-icon"><i class="lni lni-stackoverflow"></i>
                             </div>
-                            <div class="menu-title">Prestation</div>
+                            <div class="menu-title">Prestations</div>
                         </a>
                     </li>
                 @endcan

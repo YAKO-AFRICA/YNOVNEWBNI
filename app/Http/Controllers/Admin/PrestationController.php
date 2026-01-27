@@ -78,7 +78,7 @@ class PrestationController extends Controller
         } else {
             $imageSrc = '';
         }
-        $pdf = Pdf::loadView('prestations.fiches.prestationout', compact('qrcode', 'prestation', 'imageSrc'))
+        $pdf = Pdf::loadView('prestations.fiches.courrier', compact('qrcode', 'prestation', 'imageSrc'))
             ->setPaper('a4', 'portrait')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
@@ -207,7 +207,7 @@ class PrestationController extends Controller
                     // calculer le cumul des Cotisation à Terme du contrat
                     $cumulCotisationTerme = $Duree * $prime;
                     // calculer 15% du cumul des Cotisation à Terme du contrat
-                    $contisationPourcentage = $cumulCotisationTerme * 0.15;
+                    $contisationPourcentage = $cumulCotisationTerme * 0.10;
                     session(['contisationPourcentage' => $contisationPourcentage]);
                     session(['cumulCotisationTerme' => $cumulCotisationTerme]);
                     session(['TotalEncaissement' => $TotalEncaissement]);
@@ -762,6 +762,7 @@ class PrestationController extends Controller
                 if ($moyenPaiement != 'Virement_Bancaire') {
                     foreach ($request->file('libelle') as $index => $file) {
                         $fileType = $request->type[$index];
+                        $fileLabel = $request->filename[$index];
 
                         // Si le fichier est de type 'IBAN', ne pas l'enregistrer
                         if ($fileType === 'RIB') {
@@ -778,6 +779,7 @@ class PrestationController extends Controller
                             $prestationFiles[] = [
                                 'idPrestation' => $prestation->id,
                                 'libelle' => $fileName,
+                                'filename' => $fileLabel,
                                 'path' => 'storage/prestations/docsPrestation/' . $fileName,
                                 'type' => $fileType,
                             ];
@@ -786,6 +788,7 @@ class PrestationController extends Controller
                 } else {
                     foreach ($request->file('libelle') as $index => $file) {
                         $fileType = $request->type[$index];
+                        $fileLabel = $request->filename[$index];
 
                         // Si le fichier est de type 'FicheIDNum', ne pas l'enregistrer
                         if ($fileType === 'FicheIDNum') {
@@ -802,6 +805,7 @@ class PrestationController extends Controller
                             $prestationFiles[] = [
                                 'idPrestation' => $prestation->id,
                                 'libelle' => $fileName,
+                                'filename' => $fileLabel,
                                 'path' => 'storage/prestations/docsPrestation/' . $fileName,
                                 'type' => $fileType,
                             ];
@@ -833,6 +837,7 @@ class PrestationController extends Controller
                     $prestationFiles[] = [
                         'idPrestation' => $prestation->id,
                         'libelle' => $mergedFileName,
+                        'filename' => 'CNI complète',
                         'path' => 'storage/prestations/docsPrestation/' . $mergedFileName,
                         'type' => 'CNI',
                     ];
@@ -1452,6 +1457,7 @@ class PrestationController extends Controller
             'CNI' => null,
             'FicheIDNum' => null,
             'RIB' => null,
+            'AttestationClotureCompte' => null,
         ];
 
         foreach ($documents as $doc) {
@@ -1461,10 +1467,8 @@ class PrestationController extends Controller
 
         }
         // Vérification des conditions obligatoires
-        $conditionsInvalides = (
-            is_null($types['CNI']) || 
-            (is_null($types['Police']) && is_null($types['AttestationPerteContrat']) && is_null($types['bulletin'])) || 
-            (is_null($types['RIB']) && is_null($types['FicheIDNum']))
+        $conditionsInvalides = ( is_null($types['CNI']) || (is_null($types['Police']) && is_null($types['AttestationPerteContrat']) && is_null($types['bulletin'])) || 
+            (is_null($types['RIB']) && is_null($types['FicheIDNum']) && is_null($types['AttestationClotureCompte']))
         );
         // dd($types, $conditionsInvalides);
         return view('prestations.edit', compact('prestation', 'types', 'conditionsInvalides'));
@@ -1482,6 +1486,7 @@ class PrestationController extends Controller
             'CNI' => null,
             'FicheIDNum' => null,
             'RIB' => null,
+            'AttestationClotureCompte' => null,
         ];
 
         foreach ($documents as $doc) {
@@ -1494,7 +1499,7 @@ class PrestationController extends Controller
         $conditionsInvalides = (
             is_null($types['CNI']) || 
             (is_null($types['Police']) && is_null($types['AttestationPerteContrat']) && is_null($types['bulletin'])) || 
-            (is_null($types['RIB']) && is_null($types['FicheIDNum']))
+            (is_null($types['RIB']) && is_null($types['FicheIDNum']) && is_null($types['AttestationClotureCompte']))
         );
         // dd($types, $conditionsInvalides);
         return view('prestations.editAfterRejet', compact('prestation', 'types', 'conditionsInvalides'));
@@ -1604,6 +1609,7 @@ class PrestationController extends Controller
 
                 foreach ($request->file('libelle') as $index => $file) {
                     $fileType = $request->type[$index]; // Utilisation de l'index pour obtenir le type
+                    $fileLabel = $request->filename[$index];
 
                     if ($fileType === 'CNIrecto') {
                         $rectoFile = $file;
@@ -1615,6 +1621,7 @@ class PrestationController extends Controller
                         $prestationFiles[] = [
                             'idPrestation' => $prestation->id,
                             'libelle' => $fileName,
+                            'fileName' => $fileLabel,
                             'path' => 'storage/prestations/docsPrestation/' . $fileName,
                             'type' => $fileType,
                         ];
@@ -1646,6 +1653,7 @@ class PrestationController extends Controller
                     $prestationFiles[] = [
                         'idPrestation' => $prestation->id,
                         'libelle' => $mergedFileName,
+                        'fileName' => 'CNI complète',
                         'path' => 'storage/prestations/docsPrestation/' . $mergedFileName,
                         'type' => 'CNI',
                     ];
@@ -1692,6 +1700,7 @@ class PrestationController extends Controller
                 'CNI' => null,
                 'FicheIDNum' => null,
                 'RIB' => null,
+                'AttestationClotureCompte' => null,
             ];
 
             foreach ($documents as $doc) {
@@ -1703,7 +1712,7 @@ class PrestationController extends Controller
             $conditionsInvalides = (
                 is_null($types['CNI']) || 
                 (is_null($types['Police']) && is_null($types['AttestationPerteContrat']) && is_null($types['bulletin'])) || 
-                (is_null($types['RIB']) && is_null($types['FicheIDNum']))
+                (is_null($types['RIB']) && is_null($types['FicheIDNum']) && is_null($types['AttestationClotureCompte']))
             );
             if ($conditionsInvalides) {
                 $dataResponse = [
@@ -2027,6 +2036,7 @@ class PrestationController extends Controller
             TblDocPrestation::create([
                 'idPrestation' => $prestation->id,
                 'libelle' => $fileName,
+                'fileName' => 'Fiche de demande de prestation',
                 'path' => 'storage/prestations/etatPrestations/' . $fileName,
                 'type' => 'etatPrestation',
             ]);

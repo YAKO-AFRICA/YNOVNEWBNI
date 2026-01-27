@@ -121,10 +121,13 @@
     
     <div class="page">
         <div class="content" style="position: relative; height: 100%; width: 100%; overflow: hidden;">
-            <div
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            <div style="position: absolute; top: 0px; left: 0; width: 100%; height: 100%; 
                     background: url('data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('root/images/logo.png'))) }}') no-repeat center center; 
                     background-size: contain; opacity: 0.3; z-index: -1;">
+            </div>
+            <div style="position: absolute; top: -460px; right: -30px; width: 25%; height: 100%; 
+                    background: url('data:image/jpg;base64,{{ base64_encode(file_get_contents(public_path('logos/092.png'))) }}') no-repeat center center; 
+                    background-size: contain; opacity: 0.6; z-index: -1;">
             </div>
             <!-- En-tête -->
             <div class="header">

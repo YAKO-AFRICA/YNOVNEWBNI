@@ -1,9 +1,17 @@
 
 <div class="modal fade" id="exampleModal{{ $typePrestation->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     {{-- @php
-        $produitsEpargneValides = ["CADENCE", "DOIHOO", "CAD_EDUCPLUS", "PFA_IND"];
-        $produitsObsequeValides1 = ["YKE_2008","YKE_2018"];
-        $produitsObsequeValides2 = ["YKS_2008","YKS_2018"];
+        $produitsEpargneValides = ["PVRPRE", "PVRBNI", "PFA_BNI"];
+        $peuRachatPartielAvanceEpargne = ["PVRPRE", "PVRBNI", "PFA_BNI"];
+        $peuRachatPartielAvanceObseque = ["YKE_2008","YKE_2018"];
+        $produitsObsequeValides = ["YKE_2008","YKE_2018","YKF_2004","YKV_2004","YKL_2004"];
+
+        $peuTermeEpargne = ["PVRPRE", "PVRBNI", "PFA_BNI"];
+        $peuTermeObseque = ["YKE_2008","YKE_2018","YKF_2004","YKV_2004","YKL_2004"];
+
+        $peuTermeEpargneObseque = array_merge($peuTermeEpargne, $peuTermeObseque);
+        
+
         // $dureeCotisation = $NbrencConfirmer/12;
         switch ($contractDetails['periodicite']) {
             case "M":
@@ -27,8 +35,8 @@
         }
         // dd($dureeCotisation, $NbrencConfirmer);
         
-    @endphp --}}
-    {{-- <div class="modal-dialog">
+    @endphp
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -50,23 +58,23 @@
                     <div class="flex-grow-1 ms-3">
                         <p class="text-danger text-center">
                             @if ($typePrestation->impact == 0)
-                                @if (in_array($contractDetails['codeProduit'], $produitsEpargneValides))
-                                    @if ($typePrestation->id != 5 && $NbrencConfirmer <= 24)
-                                        "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir effectué une cotisation d'au moins 24 mois."
+                                @if (in_array($contractDetails['codeProduit'], $peuRachatPartielAvanceEpargne))
+                                    @if ($typePrestation->id != 5 && $NbrencConfirmer <= 12)
+                                        "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir effectué une cotisation d'au moins 12 mois."
                                     @endif
                                 @endif
-                                @if (in_array($contractDetails['codeProduit'], $produitsObsequeValides1))
-                                        @if ( ($typePrestation->id == 4 && $NbrencConfirmer <= 13))
-                                             "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir effectué une cotisation d'au moins 13 mois."
-                                        
-                                        @elseif($typePrestation->id == 2 && (float) $contractDetails['DureeCotisationAns'] >= $dureeCotisation)
-                                            "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir cotisé pendant au moins <strong>{{$contractDetails['DureeCotisationAns'] ?? ''}}</strong> ans."
-                                        @endif 
+                                @if (in_array($contractDetails['codeProduit'], $peuRachatPartielAvanceObseque))
+                                    @if (($typePrestation->id == 4 && $NbrencConfirmer <= 13))
+                                            "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir effectué une cotisation d'au moins 13 mois."
+                                    
+                                    @elseif($typePrestation->id == 2 && (float) $contractDetails['DureeCotisationAns'] >= $dureeCotisation)
+                                        "Pour pouvoir demander cette prestation : <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>, vous devez avoir cotisé pendant au moins <strong>{{$contractDetails['DureeCotisationAns'] ?? ''}}</strong> ans."
+                                    @endif 
                                 @endif
                             @elseif($typePrestation->impact == 1)
-                                @if (in_array($contractDetails['codeProduit'], $produitsEpargneValides))
-                                    @if ($TotalEncaissement <= $contisationPourcentage && $typePrestation->id == 3)
-                                        "Désolé, le cumul actuel de vos cotisations ne vous permet pas de demander la prestation <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['IdProposition'] ?? ''}}</strong>."
+                                @if (!in_array($contractDetails['codeProduit'], $peuTermeEpargneObseque))
+                                    @if ($typePrestation->id == 6)
+                                        "Désolé, vous ne pouvez pas demander une prestation de type <strong>{{$typePrestation->libelle ?? ''}}</strong> sur le contrat <strong>{{$contractDetails['produit'] ?? ''}}, ID : {{$contractDetails['IdProposition'] ?? ''}}</strong>."
                                     @endif
                                 @endif
                             @endif
@@ -79,36 +87,30 @@
             @if($typePrestation->impact == 0)
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Fermer</button>
-                    @if(in_array($contractDetails['codeProduit'], $produitsEpargneValides))
-                        @if($typePrestation->id == 5 || $NbrencConfirmer >= 24) 
+                    @if(in_array($contractDetails['codeProduit'], $peuRachatPartielAvanceEpargne))
+                        @if($typePrestation->id == 5 || $NbrencConfirmer >= 12) 
                             <a href="{{ route('prestation.create', $typePrestation->id) }}" class="btn">
                                 Ok, Je Continue
                             </a>
                         @endif
                     @endif
-                    @if(in_array($contractDetails['codeProduit'], $produitsObsequeValides1))
+                    @if(in_array($contractDetails['codeProduit'], $peuRachatPartielAvanceObseque))
                         @if(($typePrestation->id == 4 && $NbrencConfirmer >= 13) || ($typePrestation->id == 2 && (float) $contractDetails['DureeCotisationAns'] <= $dureeCotisation) || ($typePrestation->id == 5)) 
                             <a href="{{ route('prestation.create', $typePrestation->id) }}" class="btn">
                                 Ok, Je Continue
                             </a>
                         @endif 
                     @endif
-                    @if(in_array($contractDetails['codeProduit'], $produitsObsequeValides2))
-                        <a href="{{ route('prestation.create', $typePrestation->id) }}" class="btn">
-                            Ok, Je Continue
-                        </a>
-                    @endif
                 </div>
             @elseif($typePrestation->impact == 1)
                 <div class="modal-footer">
                     <button type="button" class="btn" data-bs-dismiss="modal">Fermer</button>
-                    @if(in_array($contractDetails['codeProduit'], $produitsEpargneValides))
-                        @if($TotalEncaissement >= $contisationPourcentage || $typePrestation->id != 3)
-                            <a href="{{ route('rdv.create', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
+                    @if(in_array($contractDetails['codeProduit'], $peuTermeEpargneObseque))
+                        @if($typePrestation->id != 6)
+                            <a href="{{ route('prestation.create', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
                         @endif
-                    @endif
-                    @if(in_array($contractDetails['codeProduit'], $produitsObsequeValides1) || in_array($contractDetails['codeProduit'], $produitsObsequeValides2))
-                        <a href="{{ route('rdv.create', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
+                    @else
+                        <a href="{{ route('prestation.create', $typePrestation->id) }}" type="button" class="btn">Ok, Je Continue</a>
                     @endif
                 </div>
             @elseif($typePrestation->impact == 'Autre')
@@ -119,6 +121,10 @@
             @endif
         </div>
     </div> --}}
+
+
+
+
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

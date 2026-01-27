@@ -14,7 +14,7 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Quel type de document avez-vous en votre possession ?</label>
+                                    <label class="form-label">Quel type de document avez-vous en votre possession ? <span class="star">*</span></label>
                                 </div>
                                 <div class="card-body">
                                     <select name="typeFile" class="form-select" id="typeFile" required>
@@ -30,10 +30,12 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Joindre le document ici !</label>
+                                    <label class="form-label">Joindre le document ici ! <span class="star">*</span></label>
                                 </div>
                                 <div class="card-body">
                                     <input id="Police-file-uploa" type="file" class="form-control" name="libelle[]" accept=".jpg, .png, image/jpeg, image/png, .pdf" required>
+
+                                    <input type="hidden" name="filename[]" value=".">
                                     <input type="hidden" name="type[]" value="" id="DocName">
                                 </div>
                             </div> 
@@ -52,10 +54,11 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Joindre votre CNI <strong><small>(Recto)</small></strong> </label>
+                                    <label class="form-label">Joindre votre CNI <strong><small>(Recto)</small></strong> <span class="star">*</span> </label>
                                 </div>
                                 <div class="card-body">
                                     <input id="CNIrecto-file-uploa" class="form-control" type="file" name="libelle[]" accept=".jpg, .png, image/jpeg, image/png" required>
+                                    <input type="hidden" name="filename[]" value="CNI recto">
                                     <input type="hidden" name="type[]" value="CNIrecto">
                                 </div>
                             </div> 
@@ -65,16 +68,16 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Joindre le CNI <strong><small>(Verso)</small></strong> </label>
+                                    <label class="form-label">Joindre le CNI <strong><small>(Verso)</small></strong> <span class="star">*</span> </label>
                                 </div>
                                 <div class="card-body">
                                     <input id="CNIverso-file-uploa" class="form-control" type="file" name="libelle[]" accept=".jpg, .png, image/jpeg, image/png" required>
+                                    <input type="hidden" name="filename[]" value="CNI verso">
                                     <input type="hidden" name="type[]" value="CNIverso">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -89,10 +92,11 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Fiche d'identification du n° de telephone avec le caché de l'opérateur téléphonique<small> <strong>(Ou la capture d'écran de la vérification par la syntaxe)</strong></small> </label>
+                                    <label class="form-label">Fiche d'identification du n° de telephone avec le caché de l'opérateur téléphonique<small> <strong>(Ou la capture d'écran de la vérification par la syntaxe)</strong></small> <span class="star">*</span> </label>
                                 </div>
                                 <div class="card-body">
                                     <input id="FicheID-file-uploa" class="form-control" type="file" name="libelle[]" accept=".jpg, .png, image/jpeg, image/png, .pdf">
+                                    <input type="hidden" name="filename[]" value="Fiche d'identification du numero de telephone">
                                     <input type="hidden" name="type[]" value="FicheIDNum" required>
                                 </div>
                             </div> 
@@ -102,15 +106,42 @@
                         <div class="mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <label class="form-label">Joindre le RIB <strong>(Compte courant)</strong></label>
+                                    <label class="form-label">Joindre le RIB <strong>(Compte courant)</strong> <span class="star">*</span></label>
                                 </div>
                                 <div class="card-body">
                                     <input id="RIB-file-uploa" class="form-control" type="file" name="libelle[]" accept=".jpg, .png, image/jpeg, image/png, .pdf">
+                                    <input type="hidden" name="filename[]" value="RIB">
                                     <input type="hidden" name="type[]" value="RIB">
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-12" id="AttestationClotureCompte">
+
+                        <div class="card">
+
+                            <div class="card-body">
+
+                                <div class="mb-3">
+
+                                    <label class="form-label">Attestation de cloture du compte ou tout autre document justifiant de la cloture du compte<span class="star">*</span> </label>
+
+                                    <div class="input-group">
+
+                                        <input type="file" name="libelle[]" id="AttestationClotureCompte-file-uploa" class="form-control"
+                                            accept=".jpg, .png, image/jpeg, image/png, .pdf">
+                                        <input type="hidden" name="filename[]" value="Attestation de cloture du compte">
+                                        <input type="hidden" name="type[]" value="AttestationClotureCompte">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div> 
+
                     {{-- <div class="col-12 col-md-6">
 
                         <div class="card">
