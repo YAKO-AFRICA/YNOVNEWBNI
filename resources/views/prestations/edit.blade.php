@@ -88,21 +88,26 @@
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                     <h6 class="mb-0" style="font-size: 10px">
-                                        {{ $doc->type == 'Police'
-                                            ? "Police du contrat d'assurance"
-                                            : ($doc->type == 'bulletin'
-                                                ? "Bulletin du contrat d'assurance"
-                                                : ($doc->type == 'RIB'
-                                                    ? 'RIB du compte courant'
-                                                    : ($doc->type == 'CNI'
-                                                        ? 'CNI'
-                                                        : ($doc->type == 'FicheIDNum'
-                                                            ? 'Fiche ID numéro'
-                                                            : ($doc->type == 'AttestationPerteContrat'
-                                                                ? 'Attestation de perte de contrat'
-                                                                : ($doc->type == 'etatPrestation'
-                                                                    ? 'Fiche de la prestation'
-                                                                    : '')))))) }}
+
+                                        @if ($doc->filename != '' || $doc->filename != null || $doc->filename != '.')
+                                            {{ $doc->filename }}
+                                        @else
+                                            {{ $doc->type == 'Police'
+                                                ? "Police du contrat d'assurance"
+                                                : ($doc->type == 'bulletin'
+                                                    ? "Bulletin du contrat d'assurance"
+                                                    : ($doc->type == 'RIB'
+                                                        ? 'RIB du compte courant'
+                                                        : ($doc->type == 'CNI'
+                                                            ? 'CNI'
+                                                            : ($doc->type == 'FicheIDNum'
+                                                                ? 'Fiche ID numéro'
+                                                                : ($doc->type == 'AttestationPerteContrat'
+                                                                    ? 'Attestation de perte de contrat'
+                                                                    : ($doc->type == 'etatPrestation'
+                                                                        ? 'Fiche de la prestation'
+                                                                        : '')))))) }}
+                                        @endif
                                     </h6>
                                     <p class="mb-0 text-secondary" style="font-size: 0.6em">
                                         {{ $doc->created_at ?? '' }}
@@ -119,8 +124,11 @@
                                     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Preview
-                                                    {{ $doc->type == 'Police'
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    @if ($doc->filename != '' || $doc->filename != null || $doc->filename != '.')
+                                                        {{ $doc->filename }}
+                                                    @else
+                                                        {{ $doc->type == 'Police'
                                                         ? "Police du contrat d'assurance"
                                                         : ($doc->type == 'bulletin'
                                                             ? "Bulletin du contrat d'assurance"
@@ -135,6 +143,7 @@
                                                                             : ($doc->type == 'etatPrestation'
                                                                                 ? 'Fiche de la prestation'
                                                                                 : '')))))) }}
+                                                    @endif
                                                 </h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>

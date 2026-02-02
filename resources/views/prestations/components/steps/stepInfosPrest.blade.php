@@ -52,7 +52,7 @@
                                             demander ? <span class="star">*</span></label>
                                         <input type="text" class="form-control" min="0"
                                             name="montantSouhaite" id="montantSouhaite"
-                                            placeholder="Saisir le montant souhaité" required disabled>
+                                            placeholder="Saisir le montant souhaité" required disabled  >
                                         <small><i id="msgerror" class="text-danger fs-4"></i></small>
                                         <small><i id="msgesucces" class="text-success fs-4"></i></small>
 

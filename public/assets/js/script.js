@@ -367,99 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
         }
     }
-    // async function sendOtp(phone) {
-    //     let phoneNumber = "225" + phone;
-    //     let firstTwoDigits = phone.substring(0, 2); // Extraire les deux premiers chiffres de phone
-
-    //     if (firstTwoDigits == "07" || firstTwoDigits == "05") {
-    //         try {
-    //             const response = await fetch("/api/send-otpByOrangeAPI", {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     "X-CSRF-TOKEN": document
-    //                         .querySelector('meta[name="csrf-token"]')
-    //                         .getAttribute("content"),
-    //                 },
-    //                 body: JSON.stringify({ TelPaiement: phoneNumber }),
-    //             });
-
-    //             const result = await response.json();
-
-    //             if (response.ok) {
-    //                 swal.fire({
-
-    //                     icon: "success",
-    //                     title: "Code de confirmation envoyé !",
-    //                     text: "Un code de confirmation a été envoyé sur le numéro " + phoneNumber,
-    //                     showConfirmButton: true,
-    //                     confirmButtonText: "OK",
-    //                     timer: 2000
-                        
-    //                 })
-    //                 // alert(
-    //                 //     `Un message contenant un code de confirmation a été envoyé sur le numéro ${phoneNumber}.`
-    //                 // );
-    //                 startOtpTimer(); // Démarrer le décompte après l'envoi de l'OTP
-    //                 return true;
-    //             } else {
-    //                 alert(
-    //                     "Une erreur s'est produite lors de l'envoi du code de confirmation."
-    //                 );
-    //                 // alert(result.error || "Une erreur s'est produite lors de l'envoi du code de confirmation.");
-    //                 return false;
-    //             }
-    //         } catch (error) {
-    //             alert(
-    //                 "Une erreur s'est produite lors de l'envoi du code de confirmation."
-    //             );
-    //             console.error(error);
-    //             return false;
-    //         }
-    //     } else if (firstTwoDigits == "01") {
-    //         try {
-    //             const response = await fetch("/api/send-otpByInfobipAPI", {
-    //                 method: "POST",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     "X-CSRF-TOKEN": document
-    //                         .querySelector('meta[name="csrf-token"]')
-    //                         .getAttribute("content"),
-    //                 },
-    //                 body: JSON.stringify({ TelPaiement: phoneNumber }),
-    //             });
-
-    //             const result = await response.json();
-
-    //             if (response.ok) {
-    //                 swal.fire({
-    //                     icon: "success",
-    //                     title: "Code de confirmation envoyé !",
-    //                     text: "Un code de confirmation a été envoyé sur le numéro " + phoneNumber,
-    //                     showConfirmButton: true,
-    //                     confirmButtonText: "OK",
-    //                     timer: 2000
-                        
-    //                 })
-                    
-    //                 startOtpTimer(); // Démarrer le décompte après l'envoi de l'OTP
-    //                 return true;
-    //             } else {
-    //                 alert(
-    //                     result.error ||
-    //                         "Une erreur s'est produite lors de l'envoi du code de confirmation."
-    //                 );
-    //                 return false;
-    //             }
-    //         } catch (error) {
-    //             alert(
-    //                 "Une erreur s'est produite lors de l'envoi du code de confirmation."
-    //             );
-    //             console.error(error);
-    //             return false;
-    //         }
-    //     }
-    // }
 
     // Fonction pour démarrer le compte à rebours pour l'expiration de l'OTP
     let otpExpirationTime = 3 * 60; // 5 minutes en secondes
@@ -2057,67 +1964,121 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         let phoneNumber = "225" + phone;
 
-        fetch(`${OTP_API}api/verify-otp`, {
-        // fetch("/api/verify-otp", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-            },
-            body: JSON.stringify({
-                telephone: phoneNumber,
-                otp: otp,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status == 200) {
-                    // L'OTP est valide, on passe à l'étape suivante
-                    nextStepBtn.disabled = false; // Activer le bouton "Suivant"
-                    otpInputs.forEach((input) => {
-                        input.classList.remove("is-invalid");
-                        input.classList.add("is-valid"); // Ajouter une bordure verte
-                    });
-                    swal.fire({
-                        icon: "success",
-                        title: "Votre numéro de téléphone a été vérifié avec succès.",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
+        // Récupération de la position GPS
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
 
-                    // Passer à l'étape suivante après un délai d'une seconde
-                    setTimeout(() => {
-                        stepper1.next();
-                    }, 1000);
-                } else {
-                    // L'OTP est invalide
-                    // nextStepBtn.disabled = true; // Désactiver le bouton "Suivant"
-                    otpInputs.forEach((input) => {
-                        input.classList.remove("is-valid");
-                        input.classList.add("is-invalid"); // Ajouter une bordure rouge
-                        input.value = "";
-                    });
-                    swal.fire({
-                        icon: "error",
-                        title: "Le code de vérification est invalide ou a expiré.",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    })
-                    // alert("Le code de vérification est invalide ou a expiré.");
+                fetch(`${OTP_API}api/verify-otp`, {
+                    // fetch("/api/verify-otp", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: JSON.stringify({
+                            telephone: phoneNumber,
+                            otp: otp,
+                            latitude: latitude,
+                            longitude: longitude,
+                        }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status == 200) {
+                        // L'OTP est valide, on passe à l'étape suivante
+                        nextStepBtn.disabled = false; // Activer le bouton "Suivant"
+                        otpInputs.forEach((input) => {
+                            input.classList.remove("is-invalid");
+                            input.classList.add("is-valid"); // Ajouter une bordure verte
+                        });
+                        swal.fire({
+                            icon: "success",
+                            title: "Votre numéro de téléphone a été vérifié avec succès.",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                        // Passer à l'étape suivante après un délai d'une seconde
+                        setTimeout(() => {
+                            stepper1.next();
+                        }, 1000);
+                    } else {
+                        // L'OTP est invalide
+                        // nextStepBtn.disabled = true; // Désactiver le bouton "Suivant"
+                        otpInputs.forEach((input) => {
+                            input.classList.remove("is-valid");
+                            input.classList.add("is-invalid"); // Ajouter une bordure rouge
+                            input.value = "";
+                        });
+                        swal.fire({
+                            icon: "error",
+                            title: "Le code de vérification est invalide ou a expiré.",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        })
+                        // alert("Le code de vérification est invalide ou a expiré.");
+                    }
+                })
+                .catch((error) => {
+                    console.error(
+                        "Erreur lors de la vérification de l'OTP:",
+                        error
+                    );
+                });
+            },
+                (error) => {
+                    alert('La géolocalisation est requise pour continuer. Veuillez autoriser l\'accès.');
+                    console.error('Erreur de géolocalisation:', error);
                 }
-            })
-            .catch((error) => {
-                console.error(
-                    "Erreur lors de la vérification de l'OTP:",
-                    error
-                );
-            });
+            );
+        } else {
+            alert('Votre navigateur ne supporte pas la géolocalisation.');
+        }            
     }
+    
 
     // Gestion du clic sur "Suivant" pour vérifier l'OTP
     nextStepBtn.addEventListener("click", function () {
         sendOtpVerification();
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (location.protocol === 'https:') {
+        navigator.permissions.query({
+            name: 'geolocation'
+        }).then(function (result) {
+            if (result.state === 'denied') {
+                alert("Veuillez activer la localisation pour continuer.");
+            } else {
+                map.locate({
+                    setView: true,
+                    maxZoom: 16
+                });
+            }
+        });
+
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Vous êtes ici, à " + Math.round(radius) + " mètres près.").openPopup();
+
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
+        function onLocationError(e) {
+            alert("Impossible d'obtenir votre position : " + e.message);
+        }
+
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+    } else {
+        console.log("Géolocalisation désactivée : utilisez HTTPS.");
+    }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
